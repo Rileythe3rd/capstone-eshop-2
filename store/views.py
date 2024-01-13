@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import JsonResponse
 import json
 import datetime
 from .models import * 
 from .utils import cookieCart, cartData
+from django.contrib.auth import authenticate, login, logout
 #test
 #This updates the cart total when items are added. 
 #The code is a little redundant and a rest API could be added to simplify processes such as this in the future
@@ -18,6 +19,28 @@ def store(request):
 	context = {'products':products, 'cartItems':cartItems}
 	return render(request, 'store/store.html', context)
 
+#Registration form test
+def loginUser(request):
+
+	if request.method == 'POST':
+		username = request.POST['username']
+		print('USERNAME: ', username)
+		password = request.POST['password']
+
+		user = authenticate(request, username=username, password=password)
+		
+		print('USER:', user)
+
+		if user is not None:
+			
+			login(request, user)
+			
+			return redirect('store')
+	return render(request, 'store/login_register.html')
+
+def logoutUser(request):
+	logout(request)
+	return redirect('store')
 
 def cart(request):
 	data = cartData(request)
