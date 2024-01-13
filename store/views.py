@@ -5,6 +5,7 @@ import datetime
 from .models import * 
 from .utils import cookieCart, cartData
 from django.contrib.auth import authenticate, login, logout
+from store.forms import CustomUserCreationForm
 #test
 #This updates the cart total when items are added. 
 #The code is a little redundant and a rest API could be added to simplify processes such as this in the future
@@ -21,7 +22,7 @@ def store(request):
 
 #Registration form test
 def loginUser(request):
-
+	page = 'login'
 	if request.method == 'POST':
 		username = request.POST['username']
 		print('USERNAME: ', username)
@@ -36,11 +37,30 @@ def loginUser(request):
 			login(request, user)
 			
 			return redirect('store')
-	return render(request, 'store/login_register.html')
+	return render(request, 'store/login_register.html', {'page':page})
 
 def logoutUser(request):
 	logout(request)
 	return redirect('store')
+
+def registerUser(request):
+	page = 'register'
+	form = CustomUserCreationForm()
+
+	if request.method  =='POST':
+		form = CustomUserCreationForm(request.POST)
+		if form.is_valid():
+			user = form.save(commit=False)
+			user.save()
+
+			user = authenticate(request, username=user.username, email=user.email, password=request.POST['password1'])
+
+			if user is not None:
+				Customer.objects.create(user=user, name=user.username, email=user.email)
+				login(request, user)
+				return redirect('store')
+	context = {'form': form}
+	return render(request, 'store/login_register.html', context)
 
 def cart(request):
 	data = cartData(request)
