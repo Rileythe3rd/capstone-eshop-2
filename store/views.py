@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import JsonResponse
 import json
 import datetime
 from .models import * 
 from .utils import cookieCart, cartData
+from django.contrib.auth import authenticate, login, logout
+from store.forms import CustomUserCreationForm
 #test
 #This updates the cart total when items are added. 
 #The code is a little redundant and a rest API could be added to simplify processes such as this in the future
@@ -18,6 +20,47 @@ def store(request):
 	context = {'products':products, 'cartItems':cartItems}
 	return render(request, 'store/store.html', context)
 
+#Registration form test
+def loginUser(request):
+	page = 'login'
+	if request.method == 'POST':
+		username = request.POST['username']
+		print('USERNAME: ', username)
+		password = request.POST['password']
+
+		user = authenticate(request, username=username, password=password)
+		
+		print('USER:', user)
+
+		if user is not None:
+			
+			login(request, user)
+			
+			return redirect('store')
+	return render(request, 'store/login_register.html', {'page':page})
+
+def logoutUser(request):
+	logout(request)
+	return redirect('store')
+
+def registerUser(request):
+	page = 'register'
+	form = CustomUserCreationForm()
+
+	if request.method  =='POST':
+		form = CustomUserCreationForm(request.POST)
+		if form.is_valid():
+			user = form.save(commit=False)
+			user.save()
+
+			user = authenticate(request, username=user.username, email=user.email, password=request.POST['password1'])
+
+			if user is not None:
+				Customer.objects.create(user=user, name=user.username, email=user.email)
+				login(request, user)
+				return redirect('store')
+	context = {'form': form}
+	return render(request, 'store/login_register.html', context)
 
 def cart(request):
 	data = cartData(request)
