@@ -1,7 +1,31 @@
 {% extends 'store/main.html' %}
 {% load static %}
 {% block content %}
-	<div class="row">
+	
+	<div>
+		<h2>Product Filters</h2>
+		<form class="col-lg-4" style="margin-left: 1em;" method="get">
+			{{ filter.form }}
+			<button style="margin-left: 0;" class="btn btn-primary" type="submit">Apply Filters</button>
+		</form>
+		<div class="row">
+			{% for obj in filter.qs %}
+				<div class="col-lg-4">
+					<img class="thumbnail" src="{{obj.imageURL}}">
+					<div class="box-element product">
+						<h6><strong>{{obj.name}}</strong></h6>
+						<hr>
+						<button data-product="{{obj.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
+						<a class="btn btn-outline-success" href="#">View</a>
+						<h4 style="display: inline-block; float: right"><strong>${{obj.price}}</strong></h4>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+
+
+	<!-- <div class="row">
 		{% for product in products %}
 		<div class="col-lg-4">
 			<img class="thumbnail" src="{{product.imageURL}}">
@@ -16,5 +40,5 @@
 			</div>
 		</div>
 		{% endfor %}
-	</div>
+	</div> -->
 {% endblock content %}

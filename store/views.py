@@ -6,19 +6,21 @@ from .models import *
 from .utils import cookieCart, cartData
 from django.contrib.auth import authenticate, login, logout
 from store.forms import CustomUserCreationForm
+from .filters import ProductFilter
+
 #test
 #This updates the cart total when items are added. 
 #The code is a little redundant and a rest API could be added to simplify processes such as this in the future
 def store(request):
 	data = cartData(request)
-
+	products = Product.objects.all()
 	cartItems = data['cartItems']
 	order = data['order']
 	items = data['items']
-
-	products = Product.objects.all()
-	context = {'products':products, 'cartItems':cartItems}
+	f = ProductFilter(request.GET, queryset=Product.objects.all())
+	context = {'products':products, 'cartItems':cartItems, 'filter': f,}
 	return render(request, 'store/store.html', context)
+
 
 #Registration form test
 def loginUser(request):
@@ -61,6 +63,7 @@ def registerUser(request):
 				return redirect('store')
 	context = {'form': form}
 	return render(request, 'store/login_register.html', context)
+
 
 def cart(request):
 	data = cartData(request)
