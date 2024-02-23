@@ -21,35 +21,35 @@
 <body>
     <div class="container">
         <div class="login--wrapper">
-            {% if page == 'login'%}
-            <form method="post" class="form">
-                <!--csrf token needs to be sent with every form -->
-                {% csrf_token %}
-                <a class="btn btn-primary" href="{% url 'store' %}"></i>&#x2190; Home</a>
-                <br><br>
-                <h1>Login</h1>
-                <h5>and Enjoy These Benefits:</h5>
-                <ul>
-                    <li>View Order History</li>
-                    <li>Quick Reordering and Fast Checkout</li>
-                    <li>Personalized Experience</li>
-                    <li>Receive Special Offers and Giveaways!</li>
-                </ul>
-                <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Username</label>
-                <input type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp">
-                </div>
-                <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input type="password" class="form-control" name="password" id="exampleInputPassword1">
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <br><br>
-                <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
-                
-            </form>
-            {%else%}
-                <form method='post'>
+            {% if page == 'login' %}
+                <form method="post" class="form">
+                    <!--csrf token needs to be sent with every form -->
+                    {% csrf_token %}
+                    <a class="btn btn-primary" href="{% url 'store' %}"></i>&#x2190; Home</a>
+                    <br><br>
+                    <h1>Login</h1>
+                    <h5>and Enjoy These Benefits:</h5>
+                    <ul>
+                        <li>View Order History</li>
+                        <li>Quick Reordering and Fast Checkout</li>
+                        <li>Personalized Experience</li>
+                        <li>Receive Special Offers and Giveaways!</li>
+                    </ul>
+                    <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Username</label>
+                    <input type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <input type="password" class="form-control" name="password" id="exampleInputPassword1">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <br><br>
+                    <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+                    
+                </form>
+            {% else %}
+                <form method='post' class="form">
                     <a class="btn btn-primary" href="{% url 'store' %}"></i>&#x2190; Home</a>
                     <br><br>
                     <h1>Register</h1>
@@ -64,7 +64,7 @@
                     <br><br>
                     <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
                 </form>
-            {%endif%}
+            {% endif %}
         </div>
     </div>
 </body>

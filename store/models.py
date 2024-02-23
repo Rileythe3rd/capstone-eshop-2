@@ -13,18 +13,22 @@ class Customer(models.Model):
 		return self.name
 
 
+# Product class (below)
+type_choices = (
+	("SERVER", "Server"),
+	("RACK", "Server Rack"),
+	("SWITCH", "Switch"),
+	("ROUTER", "Router"),
+	("CABLES", "Cables"),
+)
+
+# Product list in Django Admin Page
 class Product(models.Model):
-	# class ProductType(models.TextChoices):
-	# 	SERVER = "Server",
-	# 	RACK = "Server Rack",
-	# 	SWITCH = "Switch",
-	# 	ROUTER = "Router",
-	# 	CABLES = "Cables",
-	# product_type = models.CharField(max_length=20, choices=ProductType.choices)
 	name = models.CharField(max_length=200)
+	type = models.CharField(max_length=20, choices=type_choices, default="SERVER")
 	price = models.FloatField()
-	# digital = models.BooleanField(default=False,null=True, blank=True)  # product physical or digital
 	image = models.ImageField(null=True, blank=True)
+	# digital = models.BooleanField(default=False,null=True, blank=True)  # product physical or digital
 
 	def __str__(self):
 		return self.name
