@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "store.apps.StoreConfig",
     "django_filters",
-    "environ",
+    
 ]
 
 MIDDLEWARE = [
@@ -90,7 +90,7 @@ DATABASES = {
         'USER': env('USER'),
         'PASSWORD': env('PASSWORD'),
         'HOST': env('HOST'),
-        'PORT': env('PORT'),
+        'PORT': '50013',
     }
 }
 SECRET_KEY = env('SECRET_KEY')
