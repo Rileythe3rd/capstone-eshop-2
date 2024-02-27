@@ -12,3 +12,4 @@ whitenoise==6.5.0
 django-filter==23.5.0
 Pillow
 django-environ
+psycopg2
