@@ -13,3 +13,4 @@ django-filter==23.5.0
 Pillow
 django-environ
 psycopg2
+django_heroku
