@@ -1,46 +1,83 @@
 {% extends 'store/main.html' %}
 {% load static %}
 {% block content %}
-	
-	<div>
-		<h2>Product Filters</h2>
-		<form class="col-lg-4" style="margin-left: 1em;" method="get">
-			{{ filter.form }}
-			{% comment %} <button style="margin-left: 0;" class="btn btn-primary" type="submit">Apply Filters</button> {% endcomment %}
-			<br>
-			<button style="margin-left: 0;" class="btn btn-primary" type="submit">Apply Filters</button>
-		</form>
-		<div class="row">
-			{% for obj in filter.qs %}
-				<div class="col-lg-4">
-					<img class="thumbnail" src="{{obj.imageURL}}">
-					<div class="box-element product">
-						<h6><strong>{{obj.name}}</strong></h6>
-						<hr>
-						<button data-product="{{obj.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
-						<a class="btn btn-outline-success" href="#">View</a>
-						<h4 style="display: inline-block; float: right"><strong>${{obj.price}}</strong></h4>
-					</div>
-				</div>
-			{% endfor %}
+
+<div>
+	<h4 style="display: inline-block; padding-bottom: 0;" class="prod_f">Product Filters</h4>
+
+	<!-- IF LATER WE WANT TO ADD A RESET FILTER BUTTON -->
+	<!-- <button id="shide" onclick="FilterShow()" style="margin-bottom: 8px;" type="button" class="my-form-btn-style">
+		<span></span>Reset
+	</button> -->
+
+	<form id="myFIL" method="get">
+		
+		<div class="my-form-div-style">
+			<label for="id_name">Search:</label>
+			<input type="text" name="name" id="id_name">
 		</div>
-	</div>
+		<div class="my-form-div-style">
+			<label for="id_type">Type:</label>
+			<select name="type" id="id_type">
+				<option value="" selected="">All</option>
+				<option value="SERVER">Server</option>
+				<option value="RACK">Server Rack</option>
+				<option value="SWITCH">Switch</option>
+				<option value="ROUTER">Router</option>
+				<option value="CABLES">Cables</option>
+			</select>
+		</div>
+		<div class="my-form-div-style">
+			<label for="id_price__lt">Less Than: $</label>
+			<input type="number" name="price__lt" step="any" id="id_price__lt">
+		</div>
+		<div class="my-form-div-style">
+			<label for="id_price__gt">Greater Than: $</label>
+			<input type="number" name="price__gt" step="any" id="id_price__gt">
+		</div>
 
+		<!-- DEFAULT STYLE -->
+		<!-- {{ filter.form }} -->
+		
+		<button class="my-form-btn-style" type="submit">Apply Filters</button>
+	</form>
 
-	<!-- <div class="row">
-		{% for product in products %}
+	<div class="row">
+		{% for obj in filter.qs %}
 		<div class="col-lg-4">
-			<img class="thumbnail" src="{{product.imageURL}}">
+			<img class="thumbnail" src="{{obj.imageURL}}">
 			<div class="box-element product">
-				<h6><strong>{{product.name}}</strong></h6>
+				<h6><strong>{{obj.name}}</strong></h6>
 				<hr>
-
-				<button data-product="{{product.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
-				<a class="btn btn-outline-success" href="#">View</a>
-				<h4 style="display: inline-block; float: right"><strong>${{product.price}}</strong></h4>
-
+				<button data-product="{{obj.id}}" data-action="add"
+					class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
+				<a class="btn btn-outline-success" href="{{obj.imageURL}}">View</a>
+				<h4 style="display: inline-block; float: right"><strong>${{obj.price}}</strong></h4>
 			</div>
 		</div>
 		{% endfor %}
-	</div> -->
+	</div>
+</div>
+
+<button onclick="topFunction()" id="myToTop">Go to Top<br />Cart: {{cartItems}}</button>
+
+<script>
+	// Get the button
+	let myToTop = document.getElementById("myToTop");
+	// When the user scrolls down out of view of the cart, show the item count
+	window.onscroll = function() {scrollFunction()};
+	function scrollFunction() {
+		if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+			myToTop.style.display = "block";
+		} else {
+			myToTop.style.display = "none";
+		}
+	}
+	
+	// When the user clicks on the button, scroll to the top of the document
+	function topFunction() {
+	document.body.scrollTop = 0;
+	document.documentElement.scrollTop = 0;
+	}
+	</script>
 {% endblock content %}

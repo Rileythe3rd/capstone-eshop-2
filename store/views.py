@@ -22,41 +22,34 @@ def store(request):
 	return render(request, 'store/store.html', context)
 
 
-#Registration form test
 def loginUser(request):
 	page = 'login'
 	if request.method == 'POST':
 		username = request.POST['username']
 		print('USERNAME: ', username)
 		password = request.POST['password']
-
 		user = authenticate(request, username=username, password=password)
-		
 		print('USER:', user)
-
 		if user is not None:
-			
 			login(request, user)
-			
 			return redirect('store')
 	return render(request, 'store/login_register.html', {'page':page})
+
 
 def logoutUser(request):
 	logout(request)
 	return redirect('store')
 
+
 def registerUser(request):
 	page = 'register'
 	form = CustomUserCreationForm()
-
 	if request.method  =='POST':
 		form = CustomUserCreationForm(request.POST)
 		if form.is_valid():
 			user = form.save(commit=False)
 			user.save()
-
 			user = authenticate(request, username=user.username, email=user.email, password=request.POST['password1'])
-
 			if user is not None:
 				Customer.objects.create(user=user, name=user.username, email=user.email)
 				login(request, user)
@@ -67,21 +60,17 @@ def registerUser(request):
 
 def cart(request):
 	data = cartData(request)
-
 	cartItems = data['cartItems']
 	order = data['order']
 	items = data['items']
-
 	context = {'items':items, 'order':order, 'cartItems':cartItems}
 	return render(request, 'store/cart.html', context)
 
 def checkout(request):
 	data = cartData(request)
-	
 	cartItems = data['cartItems']
 	order = data['order']
 	items = data['items']
-
 	context = {'items':items, 'order':order, 'cartItems':cartItems}
 	return render(request, 'store/checkout.html', context)
 
@@ -95,45 +84,34 @@ def updateItem(request):
 	customer = request.user.customer
 	product = Product.objects.get(id=productId)
 	order, created = Order.objects.get_or_create(customer=customer, complete=False)
-
 	orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
-
 	if action == 'add':
 		orderItem.quantity = (orderItem.quantity + 1)
 	elif action == 'remove':
 		orderItem.quantity = (orderItem.quantity - 1)
-
 	orderItem.save()
-
 	if orderItem.quantity <= 0:
 		orderItem.delete()
-
 	return JsonResponse('Item was added', safe=False)
 
 def processOrder(request):
 	transaction_id = datetime.datetime.now().timestamp()
 	data = json.loads(request.body)
-
 	if request.user.is_authenticated:
 		customer = request.user.customer
 		order, created = Order.objects.get_or_create(customer=customer, complete=False)
-
 	else:
 		print('User is not logged in')
-
 		print('COOKIES:', request.COOKIES)
 		name = data['form']['name']
 		email = data['form']['email']
-
 		cookieData = cookieCart(request)
 		items = cookieData['items']
-
 		customer, created = Customer.objects.get_or_create(
 				email=email,
 				)
 		customer.name = name
 		customer.save()
-
 		order = Order.objects.create(
 			customer=customer,
 			complete=False,
