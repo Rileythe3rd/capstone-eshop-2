@@ -28,7 +28,7 @@ class Product(models.Model):
 	type = models.CharField(max_length=20, choices=type_choices, default="SERVER")
 	price = models.FloatField()
 	image = models.ImageField(null=True, blank=True)
-	# digital = models.BooleanField(default=False,null=True, blank=True)  # product physical or digital
+	digital = models.BooleanField(default=False,null=True, blank=True)  # product physical or digital
 
 	def __str__(self):
 		return self.name
@@ -55,9 +55,9 @@ class Order(models.Model):
 	def shipping(self):
 		shipping = False
 		orderitems = self.orderitem_set.all()
-		# for i in orderitems:
-		# 	if i.product.digital == False:
-		# 		shipping = True
+		for i in orderitems:
+			if i.product.digital == False:
+				shipping = True
 		return shipping
 
 	@property

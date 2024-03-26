@@ -6,7 +6,7 @@ class ProductFilter(django_filters.FilterSet):
     price__lt = django_filters.NumberFilter(label='Less Than ($)', field_name='price', lookup_expr='lt')
     price__gt = django_filters.NumberFilter(label='Greater Than ($)', field_name='price', lookup_expr='gt')
     type = django_filters.ChoiceFilter(field_name='type', choices=type_choices)
-    # digital = django_filters.BooleanFilter(lookup_expr='iexact')
+    digital = django_filters.BooleanFilter(lookup_expr='iexact')
     
 
     class Meta:
@@ -16,5 +16,5 @@ class ProductFilter(django_filters.FilterSet):
             'price__lt', 
             'price__gt', 
             'type', 
-            # 'digital',
+            'digital',
             ]
